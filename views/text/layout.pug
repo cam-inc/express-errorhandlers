@@ -1,0 +1,25 @@
+if debug
+  | >>>> Request
+  |
+  | Access Url : #{req.protocol}://#{req.get('host')}#{req.originalUrl}
+  | Headers : #{JSON.stringify(req.headers, null, '  ')}
+  | Host name : #{req.hostname}
+  | IP : #{req.ip}
+  | IPs : #{req.ips}
+  | Original URL : #{req.originalUrl}
+  | URL : #{req.url}
+  | Path : #{req.path}
+  | HTTP Version : #{req.httpVersion}
+  | HTTP Method : #{req.method}
+  | HTTP Protocol : #{req.protocol}
+  | HTTP Params : #{JSON.stringify(req.params, null, '  ')}
+  | HTTP Querys : #{JSON.stringify(req.query, null, '  ')}
+  |
+| <<<< Response
+|
+| Status : #{data.status}
+| Message : #{data.message}
+| Extra : #{JSON.stringify(data.extra, null, '  ') || '-'}
+if debug
+  | Error Stack trace : #{data.stack || '-'}
+  | Error Extra debug : #{JSON.stringify(data.extraDebug, null, '  ') || '-'}`

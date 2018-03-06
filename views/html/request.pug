@@ -1,0 +1,65 @@
+script.
+  function requestToggle() {
+    var x = document.getElementById("innerRequest");
+
+    if (x.style.display === '' || x.style.display === "none") {
+      x.style.display = "block";
+      document.getElementById('requestBtn').textContent = "Hide"
+    } else {
+      x.style.display = "none";
+      document.getElementById('requestBtn').textContent = "Show more"
+    }
+  }
+#request
+  h1 Request
+  h3 #{req.protocol}://#{req.get('host')}#{req.originalUrl}
+  button#requestBtn(onclick='requestToggle()') Show more
+  #innerRequest
+    div
+      span.key Headers
+      pre.
+        #{JSON.stringify(req.headers, null, '  ')}
+    div
+      span.key Host name
+      pre.
+        #{req.hostname}
+    div
+      span.key IP
+      pre.
+        #{req.ip}
+    div
+      span.key IPs
+      pre.
+        #{req.ips}
+    div
+      span.key Original URL
+      pre.
+        #{req.originalUrl}
+    div
+      span.key URL
+      pre.
+        #{req.url}
+    div
+      span.key Path
+      pre.
+        #{req.path}
+    div
+      span.key HTTP Version
+      pre.
+        #{req.httpVersion}
+    div
+      span.key HTTP Method
+      pre.
+        #{req.method}
+    div
+      span.key HTTP Protocol
+      pre.
+        #{req.protocol}
+    div
+      span.key HTTP Params
+      pre.
+        #{JSON.stringify(req.params, null, '  ')}
+    div
+      span.key HTTP Querys
+      pre.
+        #{JSON.stringify(req.query, null, '  ')}

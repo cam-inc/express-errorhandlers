@@ -1,0 +1,36 @@
+{
+  "name": "express-errorhandlers",
+  "version": "0.0.1",
+  "description": "Error handler for expressjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run spec",
+    "start": "EXPRESS_ERRROHANDLERS_LISTEN=1 node demo.js",
+    "debug": "EXPRESS_ERRROHANDLERS_LISTEN=1 nodemon --inspect=0.0.0.0:9229 --delay 80ms --ignore node_modules demo.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cam-inc/express-errorhandlers.git"
+  },
+  "keywords": [
+    "expressjs",
+    "express-middleware",
+    "errorhanders"
+  ],
+  "author": "CA Mobile, Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cam-inc/express-errorhandlers/issues"
+  },
+  "homepage": "https://github.com/cam-inc/express-errorhandlers#readme",
+  "devDependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.1"
+  },
+  "dependencies": {
+    "debug": "^3.1.0",
+    "pug": "^2.0.0-rc.4"
+  }
+}

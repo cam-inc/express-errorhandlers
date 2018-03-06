@@ -1,0 +1,23 @@
+#response
+  h1 Response
+  div
+    span.key Status
+    pre.
+      #{data.status}
+  div
+    span.key Message
+    pre.
+      #{data.message}
+  div
+    span.key Extra
+    pre.
+      #{JSON.stringify(data.extra, null, '  ') || '-'}
+  if debug
+    div
+      span.key Error Stack trace
+      pre.
+        #{data.stack || '-'}
+    div
+      span.key Error Extra debug
+      pre.
+        #{JSON.stringify(data.extraDebug, null, '  ') || '-'}

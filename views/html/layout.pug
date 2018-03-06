@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    meta(http-equiv='Content-type', content='text/html; charset=utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='https://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css')
+    title #{data.message} - #{data.status}
+    style.
+      body {
+        background: #546E7A;
+        margin: 5%;
+        font-family: 'Source Code Pro','SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;
+        color: #CFD8DC;
+      }
+      pre {
+        background: #263238;
+        padding: 1%;
+        overflow-x:scroll;
+        line-height: 148%;
+        font-size: 1.1em;
+      }
+      .key {
+        font-size: 1.2em;
+        font-weight: bold;
+      }
+      #innerRequest {
+        display: none;
+        margin-top: 20px;
+      }
+      hr {
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+      button {
+        font-size: 0.9em;
+        position: relative;
+        display: inline-block;
+        font-weight: bold;
+        padding: 0.5em 0.75em;
+        text-decoration: none;
+        color: #FFFFFF;
+        background: #263238;
+        transition: .4s;
+      }
+      button:hover {
+        background: #CFD8DC;
+        color: FFFFFF;
+      }
+  body
+    if debug
+      include request.pug
+      hr
+    include response.pug
