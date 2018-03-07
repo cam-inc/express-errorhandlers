@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-
+const debug = require('debug')('express-errorhandlers:demo');
 const expressHandlers = require('.');
 
 ///
@@ -26,7 +26,7 @@ app.get('/', (req, res, next) => { // eslint-disable-line
 });
 
 app.get('/401', (req, res, next) => {
-  next(new expressHandlers.Handler(null, 502, 'Unauthorized', {
+  next(new expressHandlers.Handler(null, 401, 'Unauthorized', {
     code: 'A-401-000000'
   }));
 });
@@ -43,14 +43,16 @@ app.get('/500', (req, res, next) => {
 
 ///
 app.use(expressHandlers.middleware.skipOkHandler(
-  //paths: ['/favicon.ico', ...],
+  ['/favicon.ico', '/sitemap.xml'],
   //fn: function() {...}
 ));
 
 app.use(expressHandlers.middleware.notFound(
-  ///message : 'Not Found',
-  ///extra : {...},
-  ///extraDebug: {...},
+  'Not Found :p', {
+    message: 'page not found.'
+  }, {
+    env: process.env.NODE_ENV
+  },
 ));
 
 app.use(expressHandlers.middleware.errorHandler({
@@ -59,12 +61,13 @@ app.use(expressHandlers.middleware.errorHandler({
   //templateHTMLOptions: {...}, // pug compile config (HTML)
   //templateTEXT: {...}, // pug template string or pug file path (TEXT)
   //templateTEXTOptions: {...}, // pug compile config (TEXT)
-  //status: 500, // default response status code
-  //message: '' // default error message
-  //extra: {...}, // Extended message object
-  //extraDebug: {...}, // Extended message object (only debug)
+  status: 555, // default response status code
+  message: 'Demo Server Error', // default error message
+  extra: {message: 'page server error.'}, // Extended message object
+  extraDebug: {env: process.env.NODE_ENV}, // Extended message object (only debug)
   final: (req, res, handler) => {
-    console.error('final. error:', handler); // log output
+    //console.error('final. error:', handler); // log output
+    debug('final call. %O', handler);
   }
 }));
 
