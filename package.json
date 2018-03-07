@@ -1,6 +1,6 @@
 {
   "name": "express-errorhandlers",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Error handler for expressjs",
   "main": "index.js",
   "scripts": {
