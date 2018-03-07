@@ -149,6 +149,51 @@ Error Extra debug : {}`
 const expressErrorhandlers = require('express-errorhandlers');
 ```
 
+### Handler
+
+Handler containing error class.
+
+```js
+const Handler = expressErrorhandlers.Handler;
+
+const err = new Error('Error!!');
+const handler = new Handler(err, 500, 'Internal Server Error', {serviceErrorCode: 'A-500-000001'}, {userId: 'fkei'})
+```
+
+#### Handler constructor
+
+- Type : `(Error: error, Int: status, String: message, Object: extra, Object extraDebug)`
+
+#### Handler properties
+
+- **error**
+  - Type: `Error`
+  - Description: Detected error instance.
+  - Default: `new Error();`
+  - Required: no
+- **status**
+  - Type: `Int`
+  - Description: HTTP Response status code.
+  - Default: `500`
+  - Required: no
+- **message**
+  - Type: `String`
+  - Description: Error message.
+  - Default: `Server Error`
+  - Required: no
+- **extra**
+  - Type: `Object`
+  - Description: It is a data area that you can freely use. It is also used in production environments.
+  - Default: `{}`
+  - Required: no
+- **extraDebug**
+  - Type: `Object`
+  - Description: It is a data area that you can freely use. Ignored in production environment.
+  - Default: `{}`
+  - Required: no
+
+## Types of Middleware
+
 ### Skip OK Handler
 
 We will return the unnecessary request such as `favicon.ico` etc. with 200 OK.
@@ -191,7 +236,7 @@ app.use(expressHandlers.middleware.notFound(
 
 Implement common error handler using "express next(error)".
 
-- Response data supports `Content - Type` of `json, html, plain` separately for HTTP Header `Accept`.
+- Response data supports `Content-Type` of `json, html, plain` separately for HTTP Header `Accept`.
 - It is possible to change the output format by `development` and `production`.
 - HTML and TEXT output can use template engine(only pug).
 - For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
