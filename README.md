@@ -1,10 +1,10 @@
 # express-errorhandlers
 
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
-[![Read the Docs](https://img.shields.io/readthedocs/pip.svg)](https://cam-inc.github.io/express-errorhandlers/)
+[![GitHub license](https://img.shields.io/github/license/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)]()
+![](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
