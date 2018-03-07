@@ -5,7 +5,6 @@
 [![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)]()
 ![Travis CI](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
-![npm](https://img.shields.io/npm/dt/express-errorhandlers.svg)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
