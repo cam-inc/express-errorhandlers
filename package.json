@@ -38,6 +38,7 @@
     "@types/morgan": "^1.7.37",
     "@types/node": "^11.13.0",
     "@types/pug": "^2.0.4",
+    "@types/supertest": "^2.0.8",
     "body-parser": "^1.18.2",
     "express": "^4.17.1",
     "jest": "^24.9.0",
@@ -64,6 +65,8 @@
     "node": ">=8.0.0"
   },
   "remarkConfig": {
-    "plugins": ["remark-preset-lint-recommended"]
+    "plugins": [
+      "remark-preset-lint-recommended"
+    ]
   }
 }
