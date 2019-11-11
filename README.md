@@ -4,6 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 ![Travis CI](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6269320790042228f0c0513fb3441ae)](https://www.codacy.com/manual/cam-inc/express-errorhandlers?utm_source=github.com&utm_medium=referral&utm_content=cam-inc/express-errorhandlers&utm_campaign=Badge_Grade)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
@@ -167,35 +168,35 @@ const handler = new Handler(err, 500, 'Internal Server Error', {serviceErrorCode
 
 #### Handler constructor
 
-- Type : `(Error: error, Int: status, String: message, Object: extra, Object extraDebug)`
+-   Type : `(Error: error, Int: status, String: message, Object: extra, Object extraDebug)`
 
 #### Handler properties
 
-- **error**
-  - Type: `Error`
-  - Description: Detected error instance.
-  - Default: `new Error();`
-  - Required: no
-- **status**
-  - Type: `Int`
-  - Description: HTTP Response status code.
-  - Default: `500`
-  - Required: no
-- **message**
-  - Type: `String`
-  - Description: Error message.
-  - Default: `Server Error`
-  - Required: no
-- **extra**
-  - Type: `Object`
-  - Description: It is a data area that you can freely use. It is also used in production environments.
-  - Default: `{}`
-  - Required: no
-- **extraDebug**
-  - Type: `Object`
-  - Description: It is a data area that you can freely use. Ignored in production environment.
-  - Default: `{}`
-  - Required: no
+-   **error**
+    -   Type: `Error`
+    -   Description: Detected error instance.
+    -   Default: `new Error();`
+    -   Required: no
+-   **status**
+    -   Type: `Int`
+    -   Description: HTTP Response status code.
+    -   Default: `500`
+    -   Required: no
+-   **message**
+    -   Type: `String`
+    -   Description: Error message.
+    -   Default: `Server Error`
+    -   Required: no
+-   **extra**
+    -   Type: `Object`
+    -   Description: It is a data area that you can freely use. It is also used in production environments.
+    -   Default: `{}`
+    -   Required: no
+-   **extraDebug**
+    -   Type: `Object`
+    -   Description: It is a data area that you can freely use. Ignored in production environment.
+    -   Default: `{}`
+    -   Required: no
 
 ## Types of Middleware
 
@@ -237,10 +238,10 @@ app.use(expressHandlers.middleware.notFound(
 
 Implement common error handler using "express next(error)".
 
-- Response data supports `Content-Type` of `json, html, plain` separately for HTTP Header `Accept`.
-- It is possible to change the output format by `development` and `production`.
-- HTML and TEXT output can use template engine(only pug).
-- For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
+-   Response data supports `Content-Type` of `json, html, plain` separately for HTTP Header `Accept`.
+-   It is possible to change the output format by `development` and `production`.
+-   HTML and TEXT output can use template engine(only pug).
+-   For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
 
 #### Register
 

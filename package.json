@@ -11,6 +11,7 @@
     "lint-check": "tslint-config-prettier-check ./tslint.json",
     "format": "prettier --write \"src/**/*.ts\" \"__tests__/**/*.test.ts\"",
     "tslint": "tslint --fix --format stylish --project ./tsconfig.json ./{src,__tests__}/**/*.{ts,tsx}",
+    "lint-md": "remark .",
     "prepare": "npm run build"
   },
   "repository": {
@@ -43,6 +44,9 @@
     "morgan": "^1.9.1",
     "nodemon": "^1.17.1",
     "prettier": "^1.19.1",
+    "remark-cli": "^7.0.1",
+    "remark-lint": "^6.0.5",
+    "remark-preset-lint-recommended": "^3.0.3",
     "supertest": "^3.0.0",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.5.0",
@@ -58,5 +62,8 @@
   },
   "engines": {
     "node": ">=8.0.0"
+  },
+  "remarkConfig": {
+    "plugins": ["remark-preset-lint-recommended"]
   }
 }
