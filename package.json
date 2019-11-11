@@ -12,7 +12,8 @@
     "format": "prettier --write \"src/**/*.ts\" \"__tests__/**/*.test.ts\"",
     "tslint": "tslint --fix --format stylish --project ./tsconfig.json ./{src,__tests__}/**/*.{ts,tsx}",
     "lint-md": "remark .",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "coverage": "jest --coverage --config jest.config.js"
   },
   "repository": {
     "type": "git",
