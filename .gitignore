@@ -64,3 +64,6 @@ typings/
 *.iml
 .idea
 .vscode
+
+# dist
+dist
