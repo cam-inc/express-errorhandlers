@@ -1,13 +1,11 @@
 # express-errorhandlers
 
-
 [![GitHub license](https://img.shields.io/github/license/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)]()
-[![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)]()
+[![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
+[![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 ![Travis CI](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
-
 
 Error handler for [expressjs](http://expressjs.com/)(TypeScript)
 
@@ -15,19 +13,18 @@ Error handler for [expressjs](http://expressjs.com/)(TypeScript)
 
 It is registered in the [npm repository - express-errorhandlers](https://www.npmjs.com/package/express-errorhandlers). Please install from the npm command.
 
-```
-$ npm install express-errorhandlers --save
+```sh
+npm install express-errorhandlers --save
 ```
 
 ## Demo
 
+```sh
+git clone git@github.com:cam-inc/express-errorhandlers.git
+cd express-errorhandlers
+npm install
+npm start # access url : http://localhost:3000/
 ```
-$ git clone git@github.com:cam-inc/express-errorhandlers.git
-$ cd express-errorhandlers
-$ npm install
-$ npm start # access url : http://localhost:3000/
-```
-
 
 ## Screenshot
 
@@ -151,7 +148,6 @@ Extra : {}Error Stack trace : Error: /500 Server Error!!
 Error Extra debug : {}`
 ```
 
-
 ## API
 
 ```js
@@ -208,8 +204,6 @@ const handler = new Handler(err, 500, 'Internal Server Error', {serviceErrorCode
 We will return the unnecessary request such as `favicon.ico` etc. with 200 OK.
 Used with API Server etc.
 
-#### Register
-
 Register to [expressjs](http://expressjs.com/) middleware. It is desirable after router.
 
 ```js
@@ -226,8 +220,6 @@ app.use(expressHandlers.middleware.skipOkHandler(
 ### Not Found
 
 `404 Not Found` process is done simply.
-
-#### Register
 
 Register to [expressjs](http://expressjs.com/) middleware. It is desirable after router.
 
@@ -249,7 +241,6 @@ Implement common error handler using "express next(error)".
 - It is possible to change the output format by `development` and `production`.
 - HTML and TEXT output can use template engine(only pug).
 - For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
-
 
 #### Register
 
