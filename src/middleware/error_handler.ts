@@ -1,19 +1,32 @@
-const path = require('path');
-const fs = require('fs');
+import accepts from 'accepts';
+import _debug from 'debug';
+import { NextFunction, Request, Response } from 'express';
+import fs from 'fs';
+import path from 'path';
+import pug, { compileTemplate } from 'pug';
+const log = _debug('express-errorhandler:error_handler');
 
-const accepts = require('accepts');
-const pug = require('pug');
-const log = require('debug')('express-errorhandler:error_handler');
+import Handler from '../handler';
 
-const Handler = require('../handler');
-
-//const TYPE_TEXT = 'text';
+// const TYPE_TEXT = 'text';
 const TYPE_JSON = 'json';
 const TYPE_HTML = 'html';
 const SUPPORT_TYPES = [TYPE_JSON, TYPE_HTML];
 
+export interface Options {
+  debug?: boolean;
+  templateHTML?: string;
+  templateHTMLOptions?: pug.Options;
+  templateTEXT?: string;
+  templateTEXTOptions?: pug.Options;
+  status?: number;
+  message?: string;
+  extra?: {};
+  extraDebug?: {};
+  final?: (req: Request, res: Response, handler: Handler) => void;
+}
 
-module.exports = options => {
+export default (options: Options) => {
   log('options=%O', options);
 
   const debug = !!options.debug;
@@ -22,8 +35,8 @@ module.exports = options => {
   const templateTEXT = options.templateTEXT || path.join(__dirname, '../views/text/layout.pug');
   const templateTEXTOptions = options.templateTEXTOptions;
 
-  let compileHTML;
-  let compileText;
+  let compileHTML: compileTemplate;
+  let compileText: compileTemplate;
 
   try {
     fs.statSync(templateHTML);
@@ -31,7 +44,6 @@ module.exports = options => {
 
     compileHTML = pug.compileFile(templateHTML, templateHTMLOptions);
     compileText = pug.compileFile(templateTEXT, templateTEXTOptions);
-
   } catch (e) {
     compileHTML = pug.compile(templateHTML, templateHTMLOptions);
     compileText = pug.compile(templateTEXT, templateTEXTOptions);
@@ -44,13 +56,14 @@ module.exports = options => {
 
   const final = options.final;
 
-
-  return (err, req, res, next) => { // eslint-disable-line
-
-    let handler = err;
+  // tslint:disable-next-line: variable-name
+  return (err: Error | Handler, req: Request, res: Response, _next: NextFunction) => {
+    let handler: Handler;
 
     if (!(err instanceof Handler)) {
       handler = new Handler(err, status, message, extra, extraDebug);
+    } else {
+      handler = err;
     }
 
     const data = handler.toData();
@@ -59,43 +72,44 @@ module.exports = options => {
     switch (accept.type(SUPPORT_TYPES)) {
       case TYPE_JSON:
         const ret = {
+          request: {},
           response: {
-            status: data.status,
-            message: data.message,
             extra: data.extra,
-          }
+            extraDebug: {},
+            message: data.message,
+            stack: {},
+            status: data.status,
+          },
         };
         if (debug) {
           ret.request = {
             accessurl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
             headers: req.headers,
             hostname: req.hostname,
+            httpVersion: req.httpVersion,
             ip: req.ip,
             ips: req.ips,
-            originalUrl: req.originalUrl,
-            url: req.url,
-            path: req.path,
-            httpVersion: req.httpVersion,
             method: req.method,
-            protocol: req.protocol,
+            originalUrl: req.originalUrl,
             params: req.params,
-            query: req.query
+            path: req.path,
+            protocol: req.protocol,
+            query: req.query,
+            url: req.url,
           };
           ret.response.stack = data.stack;
           ret.response.extraDebug = data.extraDebug;
         }
 
-        res
-          .status(handler.status)
-          .json(ret);
+        res.status(handler.status).json(ret);
         break;
 
       case TYPE_HTML: /////
         const html = compileHTML({
-          req,
-          res,
           data,
           debug,
+          req,
+          res,
         });
 
         res
@@ -104,12 +118,13 @@ module.exports = options => {
           .write(html);
         break;
 
-      default: /////
+      default:
+        /////
         const text = compileText({
-          req,
-          res,
           data,
           debug,
+          req,
+          res,
         });
         res
           .status(data.status)
@@ -119,22 +134,22 @@ module.exports = options => {
     }
 
     log('%O', {
-      response: data,
       request: {
         accessurl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
         headers: req.headers,
         hostname: req.hostname,
+        httpVersion: req.httpVersion,
         ip: req.ip,
         ips: req.ips,
-        originalUrl: req.originalUrl,
-        url: req.url,
-        path: req.path,
-        httpVersion: req.httpVersion,
         method: req.method,
-        protocol: req.protocol,
+        originalUrl: req.originalUrl,
         params: req.params,
-        query: req.query
-      }
+        path: req.path,
+        protocol: req.protocol,
+        query: req.query,
+        url: req.url,
+      },
+      response: data,
     });
 
     ///
@@ -143,6 +158,5 @@ module.exports = options => {
     if (final) {
       final(req, res, handler);
     }
-
   };
 };

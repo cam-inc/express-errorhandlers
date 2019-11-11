@@ -9,7 +9,7 @@
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
 
-Error handler for [expressjs](http://expressjs.com/)
+Error handler for [expressjs](http://expressjs.com/)(TypeScript)
 
 ## Install
 

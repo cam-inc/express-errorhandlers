@@ -1,12 +1,12 @@
-const supertest = require('supertest');
-const assert = require('power-assert');
+import supertest from 'supertest';
+import assert from 'assert';
 
 let app = require('../demo');
 
 describe('HTTP Request call', () => {
   let request;
 
-  before(async () => {
+  beforeAll(async () => {
     request = supertest(app);
   });
 

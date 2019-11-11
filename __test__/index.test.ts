@@ -1,5 +1,5 @@
-const assert = require('power-assert');
-const expressErrorHandlers = require('../index');
+import assert from 'assert';
+import expressErrorHandlers from '../';
 
 describe('Basic test case', () => {
   it('Function call', () => {
