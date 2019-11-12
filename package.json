@@ -13,7 +13,8 @@
     "tslint": "tslint --fix --format stylish --project ./tsconfig.json ./{src,__tests__}/**/*.{ts,tsx}",
     "lint-md": "remark .",
     "prepare": "npm run build",
-    "coverage": "jest --coverage --config jest.config.js"
+    "coverage": "jest --coverage --config jest.config.js",
+    "test-with-coverage": "jest --coverage --config jest.config.js && cat ./coverage/lcov.info | codacy-coverage --language typescript --token ${CODACY_TOKEN} --username cam-inc --projectName express-errorhandlers"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "@types/pug": "^2.0.4",
     "@types/supertest": "^2.0.8",
     "body-parser": "^1.18.2",
+    "codacy-coverage": "^3.4.0",
     "express": "^4.17.1",
     "jest": "^24.9.0",
     "morgan": "^1.9.1",
