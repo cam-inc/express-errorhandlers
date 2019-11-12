@@ -18,7 +18,7 @@ It is registered in the [npm repository - express-errorhandlers](https://www.npm
 npm install --save express-errorhandlers
 ```
 
-## Demo
+## Demo Server
 
 ```sh
 git clone git@github.com:cam-inc/express-errorhandlers.git
