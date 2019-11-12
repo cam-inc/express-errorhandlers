@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 const log = debug('express-errorhandler:skip_ok_hander');
 
 const DEFAULT_SKIP_PATHS = ['/favicon.ico', '/robots.txt'];
+
 // tslint:disable-next-line: variable-name
 const ok200 = (_err: Error, _req: Request, res: Response, _next?: NextFunction) => {
   res.status(200).end();
