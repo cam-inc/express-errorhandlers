@@ -1,4 +1,4 @@
-# express-errorhandlers
+# express-errorhandlers 🚀
 
 [![GitHub license](https://img.shields.io/github/license/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
