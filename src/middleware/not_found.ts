@@ -4,7 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 import Handler from '../handler';
 const DEFAULT_MESSAGE = 'Not Found';
 
-// catch 404 and forward to error handler
+/**
+ * catch 404 and forward to error handler
+ */
 export default (message = DEFAULT_MESSAGE, extra: {}, extraDebug: {}) => {
   // tslint:disable-next-line: variable-name
   return (_req: Request, _res: Response, next: NextFunction) => {

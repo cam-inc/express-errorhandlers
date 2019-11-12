@@ -10,9 +10,6 @@ const ok200 = (_err: Error, _req: Request, res: Response, _next?: NextFunction) 
 
 /**
  * In case of the specified pass, return simple 200 OK.
- *
- * @param {Array[String]} paths ex. ['/favicon.ico', '/robots.txt']
- * @param {*} fn res program code. ex. see ok200(...)
  */
 export default (paths = DEFAULT_SKIP_PATHS, fn = ok200) => {
   return (err: Error, req: Request, res: Response, next: NextFunction) => {
