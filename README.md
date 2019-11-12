@@ -15,7 +15,7 @@ Error handler for [expressjs](http://expressjs.com/)(TypeScript)
 It is registered in the [npm repository - express-errorhandlers](https://www.npmjs.com/package/express-errorhandlers). Please install from the npm command.
 
 ```sh
-npm install express-errorhandlers --save
+npm install --save express-errorhandlers
 ```
 
 ## Demo
