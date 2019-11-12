@@ -1,12 +1,13 @@
 {
   "name": "express-errorhandlers",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Error handler for expressjs",
   "main": "dist/index.js",
   "scripts": {
     "start": "EXPRESS_ERRROHANDLERS_LISTEN=1 node --inspect -r ts-node/register ./demo.ts",
     "build:pre": "npm run format && npm run tslint && npm run test && npm run build",
     "build": "tsc",
+    "postbuild": "copyfiles -u 1 src/views/**/*.pug dist/",
     "test": "jest --config jest.config.js",
     "lint-check": "tslint-config-prettier-check ./tslint.json",
     "format": "prettier --write \"src/**/*.ts\" \"__tests__/**/*.test.ts\"",
@@ -43,6 +44,7 @@
     "@types/supertest": "^2.0.8",
     "body-parser": "^1.18.2",
     "codacy-coverage": "^3.4.0",
+    "copyfiles": "^2.1.1",
     "express": "^4.17.1",
     "jest": "^24.9.0",
     "morgan": "^1.9.1",
