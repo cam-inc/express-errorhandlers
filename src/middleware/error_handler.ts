@@ -26,6 +26,9 @@ export interface Options {
   final?: (req: Request, res: Response, handler: Handler) => void;
 }
 
+/**
+ * Multi Error Handler
+ */
 export default (options: Options) => {
   log('options=%O', options);
 

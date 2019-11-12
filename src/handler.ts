@@ -1,6 +1,9 @@
 const DEFAULT_ERROR_MESSAGE = 'Server Error';
 const DEFAULT_ERROR_STATUS = 500;
 
+/**
+ * Error Handler Class
+ */
 export default class Handler {
   public error: Error;
   public status: number;
@@ -16,6 +19,9 @@ export default class Handler {
     this.extraDebug = extraDebug || {};
   }
 
+  /**
+   * Get output data
+   */
   public toData() {
     return {
       extra: this.extra,
