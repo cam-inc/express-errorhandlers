@@ -29,7 +29,7 @@ export interface Options {
 /**
  * Multi Error Handler
  */
-export default (options: Options) => {
+export default (options: Options = {}) => {
   log('options=%O', options);
 
   const debug = !!options.debug;

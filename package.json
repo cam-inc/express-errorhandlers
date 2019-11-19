@@ -4,7 +4,9 @@
   "description": "Error handler for expressjs",
   "main": "dist/index.js",
   "scripts": {
-    "start": "EXPRESS_ERRROHANDLERS_LISTEN=1 node --inspect -r ts-node/register ./demo.ts",
+    "start": "npm run start:ts",
+    "start:ts": "EXPRESS_ERRROHANDLERS_LISTEN=1 node --inspect -r ts-node/register ./demo.ts",
+    "start:js": "EXPRESS_ERRROHANDLERS_LISTEN=1 node ./demo.js",
     "build:pre": "npm run format && npm run tslint && npm run test && npm run build",
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/views/**/*.pug dist/",

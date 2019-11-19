@@ -1,17 +1,23 @@
 import assert from 'assert';
-import expressErrorHandlers from '../';
+import { Handler } from '../src';
+import { errorHandler as errorHandler1, notFound as notFound1, skipOkHandler as skipOkHandler1 } from '../src/middleware';
+import errorHandler from '../src/middleware/error_handler';
+import notFound from '../src/middleware/not_found';
+import skipOkHandler from '../src/middleware/skip_ok_hander';
 
 describe('Basic test case', () => {
   it('Function call', () => {
-    assert.ok(expressErrorHandlers.middleware);
-    assert.ok(expressErrorHandlers.middleware.notFound);
-    assert.ok(expressErrorHandlers.middleware.errorHandler);
-    assert.ok(expressErrorHandlers.middleware.skipOkHandler);
-    assert.ok(expressErrorHandlers.Handler);
+    assert.ok(notFound1());
+    assert.ok(notFound());
+    assert.ok(skipOkHandler());
+    assert.ok(skipOkHandler1());
+    assert.ok(errorHandler());
+    assert.ok(errorHandler1());
+
   });
 
   it('Simple new Handler', () => {
-    const handler = new expressErrorHandlers.Handler();
+    const handler = new Handler();
 
     assert.equal(handler.status, 500);
     assert.ok(handler.error instanceof Error);
@@ -30,7 +36,7 @@ describe('Basic test case', () => {
 
   it('Custom new Handler', () => {
     const error = new Error('Custom');
-    const handler = new expressErrorHandlers.Handler(error, 555, 'Custom Server Error', {foo: true}, {bar: true});
+    const handler = new Handler(error, 555, 'Custom Server Error', {foo: true}, {bar: true});
 
     assert.equal(handler.status, 555);
     assert.ok(handler.error instanceof Error);

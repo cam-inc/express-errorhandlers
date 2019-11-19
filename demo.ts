@@ -6,7 +6,8 @@ import d from 'debug';
 import express, { NextFunction, Request, Response } from 'express';
 import logger from 'morgan';
 const debug = d('express-errorhandlers:demo');
-import expressHandlers from './src';
+import { Handler } from './src';
+import { errorHandler, notFound, skipOkHandler } from './src/middleware';
 
 ///
 
@@ -32,14 +33,14 @@ app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
 
 // tslint:disable-next-line: variable-name
 app.get('/401', (_req: Request, _res: Response, next: NextFunction) => {
-  next(new expressHandlers.Handler(undefined, 401, 'Unauthorized', {
+  next(new Handler(undefined, 401, 'Unauthorized', {
     code: 'A-401-000000'
   }));
 });
 
 // tslint:disable-next-line: variable-name
 app.get('/502', (_req: Request, _res: Response, next: NextFunction) => {
-  next(new expressHandlers.Handler(undefined, 502, 'Bad Gateway', {
+  next(new Handler(undefined, 502, 'Bad Gateway', {
     code: 'A-502-000000'
   }));
 });
@@ -50,12 +51,12 @@ app.get('/500', (req: Request, _res: Response, next: NextFunction) => {
 });
 
 ///
-app.use(expressHandlers.middleware.skipOkHandler(
+app.use(skipOkHandler(
   ['/favicon.ico', '/sitemap.xml'],
   // fn: function() {...}
 ));
 
-app.use(expressHandlers.middleware.notFound(
+app.use(notFound(
   'Not Found :p', {
   message: 'page not found.'
 }, {
@@ -63,7 +64,7 @@ app.use(expressHandlers.middleware.notFound(
 },
 ));
 
-app.use(expressHandlers.middleware.errorHandler({
+app.use(errorHandler({
   debug: process.env.NODE_ENV !== 'production',
   extra: { message: 'page server error.' }, // Extended message object
   extraDebug: { env: process.env.NODE_ENV }, // Extended message object (only debug)
