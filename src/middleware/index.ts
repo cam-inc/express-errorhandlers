@@ -5,8 +5,4 @@ import skipOkHandler from './skip_ok_hander';
 /**
  * Middleware list.
  */
-export default {
-  errorHandler,
-  notFound,
-  skipOkHandler,
-};
+export { errorHandler, notFound, skipOkHandler };

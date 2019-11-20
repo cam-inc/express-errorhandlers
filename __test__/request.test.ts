@@ -31,7 +31,6 @@ describe('HTTP Request call', () => {
         assert.ok(response.stack);
         assert.ok(response.extraDebug);
 
-        // tslint:disable-next-line: no-shadowed-variable
         const request = res.body.request;
         assert.ok(request.accessurl);
         assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');
@@ -62,7 +61,6 @@ describe('HTTP Request call', () => {
         assert.ok(response.stack);
         assert.ok(response.extraDebug);
 
-        // tslint:disable-next-line: no-shadowed-variable
         const request = res.body.request;
         assert.ok(request.accessurl);
         assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');
@@ -92,7 +90,6 @@ describe('HTTP Request call', () => {
         assert.ok(response.stack);
         assert.equal(response.extraDebug.env, 'test');
 
-        // tslint:disable-next-line: no-shadowed-variable
         const request = res.body.request;
         assert.ok(request.accessurl);
         assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');

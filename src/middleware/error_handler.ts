@@ -29,7 +29,7 @@ export interface Options {
 /**
  * Multi Error Handler
  */
-export default (options: Options) => {
+export default (options: Options = {}) => {
   log('options=%O', options);
 
   const debug = !!options.debug;
@@ -59,7 +59,7 @@ export default (options: Options) => {
 
   const final = options.final;
 
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return (err: Error | Handler, req: Request, res: Response, _next: NextFunction) => {
     let handler: Handler;
 
@@ -73,7 +73,7 @@ export default (options: Options) => {
     const accept = accepts(req);
 
     switch (accept.type(SUPPORT_TYPES)) {
-      case TYPE_JSON:
+      case TYPE_JSON: {
         const ret = {
           request: {},
           response: {
@@ -106,8 +106,8 @@ export default (options: Options) => {
 
         res.status(handler.status).json(ret);
         break;
-
-      case TYPE_HTML: /////
+      }
+      case TYPE_HTML: {
         const html = compileHTML({
           data,
           debug,
@@ -120,9 +120,8 @@ export default (options: Options) => {
           .set('Content-Type', 'text/html')
           .write(html);
         break;
-
-      default:
-        /////
+      }
+      default: {
         const text = compileText({
           data,
           debug,
@@ -134,6 +133,7 @@ export default (options: Options) => {
           .set('Content-Type', 'text/plain')
           .write(text);
         break;
+      }
     }
 
     log('%O', {

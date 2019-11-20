@@ -6,7 +6,8 @@ import d from 'debug';
 import express, { NextFunction, Request, Response } from 'express';
 import logger from 'morgan';
 const debug = d('express-errorhandlers:demo');
-import expressHandlers from './src';
+import { Handler } from './src';
+import { errorHandler, notFound, skipOkHandler } from './src/middleware';
 
 ///
 
@@ -19,7 +20,6 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 
-// tslint:disable-next-line: variable-name
 app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
   res.status(200).json({
     'Access URLs': [
@@ -30,32 +30,29 @@ app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
-// tslint:disable-next-line: variable-name
 app.get('/401', (_req: Request, _res: Response, next: NextFunction) => {
-  next(new expressHandlers.Handler(undefined, 401, 'Unauthorized', {
+  next(new Handler(undefined, 401, 'Unauthorized', {
     code: 'A-401-000000'
   }));
 });
 
-// tslint:disable-next-line: variable-name
 app.get('/502', (_req: Request, _res: Response, next: NextFunction) => {
-  next(new expressHandlers.Handler(undefined, 502, 'Bad Gateway', {
+  next(new Handler(undefined, 502, 'Bad Gateway', {
     code: 'A-502-000000'
   }));
 });
 
-// tslint:disable-next-line: variable-name
 app.get('/500', (req: Request, _res: Response, next: NextFunction) => {
   next(new Error(`${req.path} Server Error!!`));
 });
 
 ///
-app.use(expressHandlers.middleware.skipOkHandler(
+app.use(skipOkHandler(
   ['/favicon.ico', '/sitemap.xml'],
   // fn: function() {...}
 ));
 
-app.use(expressHandlers.middleware.notFound(
+app.use(notFound(
   'Not Found :p', {
   message: 'page not found.'
 }, {
@@ -63,11 +60,10 @@ app.use(expressHandlers.middleware.notFound(
 },
 ));
 
-app.use(expressHandlers.middleware.errorHandler({
+app.use(errorHandler({
   debug: process.env.NODE_ENV !== 'production',
   extra: { message: 'page server error.' }, // Extended message object
   extraDebug: { env: process.env.NODE_ENV }, // Extended message object (only debug)
-  // tslint:disable-next-line: variable-name
   final: (_req, _res, handler) => {
     // console.error('final. error:', handler); // log output
     debug('final call. %O', handler);
@@ -81,7 +77,6 @@ app.use(expressHandlers.middleware.errorHandler({
 }));
 
 if (process.env.EXPRESS_ERRROHANDLERS_LISTEN) {
-  // tslint:disable-next-line: no-console
   app.listen(PORT, () => console.log(`demo app listening on port ${PORT}!`));
 }
 

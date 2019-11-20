@@ -7,8 +7,7 @@ const DEFAULT_MESSAGE = 'Not Found';
 /**
  * catch 404 and forward to error handler
  */
-export default (message = DEFAULT_MESSAGE, extra: {}, extraDebug: {}) => {
-  // tslint:disable-next-line: variable-name
+export default (message = DEFAULT_MESSAGE, extra = {}, extraDebug = {}) => {
   return (_req: Request, _res: Response, next: NextFunction) => {
     const handler = new Handler(undefined, 404, message, extra, extraDebug);
     log('not found %O', handler.toData());
