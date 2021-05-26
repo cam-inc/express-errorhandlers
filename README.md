@@ -4,7 +4,6 @@
 [![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 [![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
 ![Travis CI](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d6269320790042228f0c0513fb3441ae)](https://www.codacy.com/manual/cam-inc/express-errorhandlers?utm_source=github.com&utm_medium=referral&utm_content=cam-inc/express-errorhandlers&utm_campaign=Badge_Grade)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
