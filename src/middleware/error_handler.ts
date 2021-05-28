@@ -80,7 +80,7 @@ export default (options: Options = {}) => {
             extra: data.extra,
             extraDebug: {},
             message: data.message,
-            stack: {},
+            stack: '',
             status: data.status,
           },
         };
