@@ -100,7 +100,7 @@ export default (options: Options = {}) => {
             query: req.query,
             url: req.url,
           };
-          ret.response.stack = data.stack;
+          ret.response.stack = data.stack || '';
           ret.response.extraDebug = data.extraDebug;
         }
 
@@ -115,10 +115,7 @@ export default (options: Options = {}) => {
           res,
         });
 
-        res
-          .status(data.status)
-          .set('Content-Type', 'text/html')
-          .write(html);
+        res.status(data.status).set('Content-Type', 'text/html').write(html);
         break;
       }
       default: {
@@ -128,10 +125,7 @@ export default (options: Options = {}) => {
           req,
           res,
         });
-        res
-          .status(data.status)
-          .set('Content-Type', 'text/plain')
-          .write(text);
+        res.status(data.status).set('Content-Type', 'text/plain').write(text);
         break;
       }
     }

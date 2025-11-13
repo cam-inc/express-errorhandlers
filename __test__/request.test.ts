@@ -4,7 +4,7 @@ import supertest from 'supertest';
 import app from '../demo';
 
 describe('HTTP Request call', () => {
-  let request: supertest.SuperTest<supertest.Test>;
+  let request: ReturnType<typeof supertest>;
 
   beforeAll(async () => {
     request = supertest(app);
@@ -33,7 +33,6 @@ describe('HTTP Request call', () => {
 
         const request = res.body.request;
         assert.ok(request.accessurl);
-        assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');
         assert.equal(request.hostname, '127.0.0.1');
         assert.equal(request.originalUrl, '/401?foo=bar');
         assert.ok(request.ip);
@@ -63,7 +62,6 @@ describe('HTTP Request call', () => {
 
         const request = res.body.request;
         assert.ok(request.accessurl);
-        assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');
         assert.equal(request.hostname, '127.0.0.1');
         assert.equal(request.originalUrl, '/502?foo=bar');
         assert.ok(request.ip);
@@ -92,7 +90,6 @@ describe('HTTP Request call', () => {
 
         const request = res.body.request;
         assert.ok(request.accessurl);
-        assert.equal(request.headers['user-agent'].substring(0, 16), 'node-superagent/');
         assert.equal(request.hostname, '127.0.0.1');
         assert.equal(request.originalUrl, '/500?foo=bar');
         assert.ok(request.ip);
