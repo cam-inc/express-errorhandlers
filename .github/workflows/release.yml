@@ -35,4 +35,9 @@ jobs:
         run: npm run build
 
       - name: Publish to npm with OIDC
-        run: npm publish --provenance
+        run: |
+          if [[ $GITHUB_REF == refs/tags/*-rc* ]]; then
+            npm publish --provenance --tag next
+          else
+            npm publish --provenance
+          fi
