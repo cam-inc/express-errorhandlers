@@ -1,9 +1,9 @@
 # express-errorhandlers 🚀
 
 [![GitHub license](https://img.shields.io/github/license/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
-[![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/blob/develop/LICENSE)
-![Travis CI](https://img.shields.io/travis/cam-inc/express-errorhandlers/develop.svg)
+[![GitHub release](https://img.shields.io/github/release/cam-inc/express-errorhandlers.svg)](https://github.com/cam-inc/express-errorhandlers/releases)
+[![Test](https://github.com/cam-inc/express-errorhandlers/actions/workflows/test.yml/badge.svg)](https://github.com/cam-inc/express-errorhandlers/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/express-errorhandlers.svg)](https://www.npmjs.com/package/express-errorhandlers)
 
 [![NPM](https://nodei.co/npm/express-errorhandlers.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/express-errorhandlers/)
 
@@ -162,40 +162,46 @@ Handler containing error class.
 const Handler = expressErrorhandlers.Handler;
 
 const err = new Error('Error!!');
-const handler = new Handler(err, 500, 'Internal Server Error', {serviceErrorCode: 'A-500-000001'}, {userId: 'fkei'})
+const handler = new Handler(
+  err,
+  500,
+  'Internal Server Error',
+  { serviceErrorCode: 'A-500-000001' },
+  { userId: 'fkei' },
+);
 ```
 
 #### Handler constructor
 
--   Type : `(Error: error, Int: status, String: message, Object: extra, Object extraDebug)`
+- Type : `(Error: error, Int: status, String: message, Object: extra, Object extraDebug)`
 
 #### Handler properties
 
--   **error**
-    -   Type: `Error`
-    -   Description: Detected error instance.
-    -   Default: `new Error();`
-    -   Required: no
--   **status**
-    -   Type: `Int`
-    -   Description: HTTP Response status code.
-    -   Default: `500`
-    -   Required: no
--   **message**
-    -   Type: `String`
-    -   Description: Error message.
-    -   Default: `Server Error`
-    -   Required: no
--   **extra**
-    -   Type: `Object`
-    -   Description: It is a data area that you can freely use. It is also used in production environments.
-    -   Default: `{}`
-    -   Required: no
--   **extraDebug**
-    -   Type: `Object`
-    -   Description: It is a data area that you can freely use. Ignored in production environment.
-    -   Default: `{}`
-    -   Required: no
+- **error**
+  - Type: `Error`
+  - Description: Detected error instance.
+  - Default: `new Error();`
+  - Required: no
+- **status**
+  - Type: `Int`
+  - Description: HTTP Response status code.
+  - Default: `500`
+  - Required: no
+- **message**
+  - Type: `String`
+  - Description: Error message.
+  - Default: `Server Error`
+  - Required: no
+- **extra**
+  - Type: `Object`
+  - Description: It is a data area that you can freely use. It is also used in production environments.
+  - Default: `{}`
+  - Required: no
+- **extraDebug**
+  - Type: `Object`
+  - Description: It is a data area that you can freely use. Ignored in production environment.
+  - Default: `{}`
+  - Required: no
 
 ## Types of Middleware
 
@@ -237,10 +243,10 @@ app.use(expressHandlers.middleware.notFound(
 
 Implement common error handler using "express next(error)".
 
--   Response data supports `Content-Type` of `json, html, plain` separately for HTTP Header `Accept`.
--   It is possible to change the output format by `development` and `production`.
--   HTML and TEXT output can use template engine(only pug).
--   For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
+- Response data supports `Content-Type` of `json, html, plain` separately for HTTP Header `Accept`.
+- It is possible to change the output format by `development` and `production`.
+- HTML and TEXT output can use template engine(only pug).
+- For custom processing such as log output, any processing can be executed after all processing is finished. **(options: final)**
 
 #### Register
 
@@ -277,13 +283,65 @@ If debugging is off, only the following data will be returned.
 };
 ```
 
+## Release
+
+### Release Process
+
+1. **Update version in package.json**
+
+   ```bash
+   # Patch version (1.0.0 → 1.0.1)
+   npm version patch --no-git-tag-version
+
+   # Minor version (1.0.0 → 1.1.0)
+   npm version minor --no-git-tag-version
+
+   # Major version (1.0.0 → 2.0.0)
+   npm version major --no-git-tag-version
+
+   # Prerelease version (1.0.0 → 1.0.1-rc1)
+   npm version prerelease --preid=rc --no-git-tag-version
+   ```
+
+2. **Create a Pull Request**
+
+   ```bash
+   git checkout -b release/vX.Y.Z
+   git add package.json package-lock.json
+   git commit -m "chore: bump version to vX.Y.Z"
+   git push origin release/vX.Y.Z
+   ```
+
+   Then create a PR and merge it into the `develop` branch.
+
+3. **Create GitHub Release**
+
+   Create a GitHub Release with a new tag:
+   - Go to the [Releases](https://github.com/cam-inc/express-errorhandlers/releases) page
+   - Click "Draft a new release"
+   - Click "Choose a tag" and type a new tag (e.g., `v2.0.0-rc1`)
+   - Set the release title (e.g., `v2.0.0-rc1`)
+   - Add release notes describing the changes
+   - Check "Set as a pre-release" if it's a release candidate
+   - Click "Publish release"
+
+4. **Automated npm publish**
+   - GitHub Actions will automatically run when the tag is created
+   - The workflow executes: Test → Build → Publish to npm
+   - Monitor progress in the [Actions](https://github.com/cam-inc/express-errorhandlers/actions) tab
+
+### Supported Tag Formats
+
+- `v1.0.0`, `v2.5.3` - Stable releases
+- `v1.0.0-rc1`, `v2.0.0-rc99` - Release candidates
+
 ## Changelog
 
 Detailed changes for each release are documented in the [release notes](https://github.com/cam-inc/express-errorhandlers/releases).
 
 ## Copyright
 
-CA Mobile, Inc. All rights reserved.
+CAM, Inc. All rights reserved.
 
 ## LICENSE
 
