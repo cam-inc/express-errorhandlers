@@ -61,9 +61,8 @@ app.use(notFound(
 ));
 
 app.use(errorHandler({
-  debug: process.env.NODE_ENV !== 'production',
   extra: { message: 'page server error.' }, // Extended message object
-  extraDebug: { env: process.env.NODE_ENV }, // Extended message object (only debug)
+  extraDebug: { env: process.env.NODE_ENV }, // Extended message object (only in final callback)
   final: (_req, _res, handler) => {
     // console.error('final. error:', handler); // log output
     debug('final call. %O', handler);

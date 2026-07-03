@@ -28,23 +28,9 @@ describe('HTTP Request call', () => {
         assert.equal(response.status, 401);
         assert.equal(response.message, 'Unauthorized');
         assert.equal(response.extra.code, 'A-401-000000');
-        assert.ok(response.stack);
-        assert.ok(response.extraDebug);
-
-        const request = res.body.request;
-        assert.ok(request.accessurl);
-        assert.equal(request.hostname, '127.0.0.1');
-        assert.equal(request.originalUrl, '/401?foo=bar');
-        assert.ok(request.ip);
-        assert.ok(request.ips);
-        assert.equal(request.url, '/401?foo=bar');
-        assert.equal(request.path, '/401');
-        assert.equal(request.httpVersion, '1.1');
-        assert.equal(request.method, 'GET');
-        assert.equal(request.protocol, 'http');
-        assert.ok(request.params);
-        assert.equal(request.query.foo, 'bar');
-
+        assert.equal(response.stack, undefined);
+        assert.equal(response.extraDebug, undefined);
+        assert.equal(res.body.request, undefined);
       });
   });
 
@@ -57,22 +43,9 @@ describe('HTTP Request call', () => {
         assert.equal(response.status, 502);
         assert.equal(response.message, 'Bad Gateway');
         assert.equal(response.extra.code, 'A-502-000000');
-        assert.ok(response.stack);
-        assert.ok(response.extraDebug);
-
-        const request = res.body.request;
-        assert.ok(request.accessurl);
-        assert.equal(request.hostname, '127.0.0.1');
-        assert.equal(request.originalUrl, '/502?foo=bar');
-        assert.ok(request.ip);
-        assert.ok(request.ips);
-        assert.equal(request.url, '/502?foo=bar');
-        assert.equal(request.path, '/502');
-        assert.equal(request.httpVersion, '1.1');
-        assert.equal(request.method, 'GET');
-        assert.equal(request.protocol, 'http');
-        assert.ok(request.params);
-        assert.equal(request.query.foo, 'bar');
+        assert.equal(response.stack, undefined);
+        assert.equal(response.extraDebug, undefined);
+        assert.equal(res.body.request, undefined);
       });
   });
 
@@ -85,22 +58,9 @@ describe('HTTP Request call', () => {
         assert.equal(response.status, 555);
         assert.equal(response.message, 'Demo Server Error');
         assert.equal(response.extra.message, 'page server error.');
-        assert.ok(response.stack);
-        assert.equal(response.extraDebug.env, 'test');
-
-        const request = res.body.request;
-        assert.ok(request.accessurl);
-        assert.equal(request.hostname, '127.0.0.1');
-        assert.equal(request.originalUrl, '/500?foo=bar');
-        assert.ok(request.ip);
-        assert.ok(request.ips);
-        assert.equal(request.url, '/500?foo=bar');
-        assert.equal(request.path, '/500');
-        assert.equal(request.httpVersion, '1.1');
-        assert.equal(request.method, 'GET');
-        assert.equal(request.protocol, 'http');
-        assert.ok(request.params);
-        assert.equal(request.query.foo, 'bar');
+        assert.equal(response.stack, undefined);
+        assert.equal(response.extraDebug, undefined);
+        assert.equal(res.body.request, undefined);
       });
   });
 
