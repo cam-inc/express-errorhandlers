@@ -194,14 +194,13 @@ describe('errorHandler middleware', () => {
     assert.equal(response.body.response.message, 'Custom Message');
   });
 
-  it('should include extra in response but not extraDebug', async () => {
+  it('should include extra in response', async () => {
     const app = express();
     app.get('/test', () => {
       throw new Error('Test');
     });
     app.use(errorHandler({
       extra: { foo: 'bar' },
-      extraDebug: { baz: 'qux' },
     }));
 
     const response = await supertest(app)
@@ -210,8 +209,6 @@ describe('errorHandler middleware', () => {
       .expect(500);
 
     assert.equal(response.body.response.extra.foo, 'bar');
-    const body = JSON.stringify(response.body);
-    assert.ok(!body.includes('qux'), 'extraDebug values must not appear in response');
   });
 
   it('should call final callback with full handler including stack and extraDebug', async () => {

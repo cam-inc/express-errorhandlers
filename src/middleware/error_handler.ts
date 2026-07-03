@@ -21,7 +21,6 @@ export interface Options {
   status?: number;
   message?: string;
   extra?: {};
-  extraDebug?: {};
   final?: (req: Request, res: Response, handler: Handler) => void;
 }
 
@@ -53,7 +52,6 @@ export default (options: Options = {}) => {
   const status = options.status;
   const message = options.message;
   const extra = options.extra;
-  const extraDebug = options.extraDebug;
 
   const final = options.final;
 
@@ -62,7 +60,7 @@ export default (options: Options = {}) => {
     let handler: Handler;
 
     if (!(err instanceof Handler)) {
-      handler = new Handler(err, status, message, extra, extraDebug);
+      handler = new Handler(err, status, message, extra);
     } else {
       handler = err;
     }
