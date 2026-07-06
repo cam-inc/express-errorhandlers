@@ -14,7 +14,6 @@ const TYPE_HTML = 'html';
 const SUPPORT_TYPES = [TYPE_JSON, TYPE_HTML];
 
 export interface Options {
-  debug?: boolean;
   templateHTML?: string;
   templateHTMLOptions?: pug.Options;
   templateTEXT?: string;
@@ -22,7 +21,6 @@ export interface Options {
   status?: number;
   message?: string;
   extra?: {};
-  extraDebug?: {};
   final?: (req: Request, res: Response, handler: Handler) => void;
 }
 
@@ -32,7 +30,6 @@ export interface Options {
 export default (options: Options = {}) => {
   log('options=%O', options);
 
-  const debug = !!options.debug;
   const templateHTML = options.templateHTML || path.join(__dirname, '../views/html/layout.pug');
   const templateHTMLOptions = options.templateHTMLOptions;
   const templateTEXT = options.templateTEXT || path.join(__dirname, '../views/text/layout.pug');
@@ -55,7 +52,6 @@ export default (options: Options = {}) => {
   const status = options.status;
   const message = options.message;
   const extra = options.extra;
-  const extraDebug = options.extraDebug;
 
   const final = options.final;
 
@@ -64,7 +60,7 @@ export default (options: Options = {}) => {
     let handler: Handler;
 
     if (!(err instanceof Handler)) {
-      handler = new Handler(err, status, message, extra, extraDebug);
+      handler = new Handler(err, status, message, extra);
     } else {
       handler = err;
     }
@@ -75,34 +71,12 @@ export default (options: Options = {}) => {
     switch (accept.type(SUPPORT_TYPES)) {
       case TYPE_JSON: {
         const ret = {
-          request: {},
           response: {
             extra: data.extra,
-            extraDebug: {},
             message: data.message,
-            stack: '',
             status: data.status,
           },
         };
-        if (debug) {
-          ret.request = {
-            accessurl: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-            headers: req.headers,
-            hostname: req.hostname,
-            httpVersion: req.httpVersion,
-            ip: req.ip,
-            ips: req.ips,
-            method: req.method,
-            originalUrl: req.originalUrl,
-            params: req.params,
-            path: req.path,
-            protocol: req.protocol,
-            query: req.query,
-            url: req.url,
-          };
-          ret.response.stack = data.stack || '';
-          ret.response.extraDebug = data.extraDebug;
-        }
 
         res.status(handler.status).json(ret);
         break;
@@ -110,7 +84,6 @@ export default (options: Options = {}) => {
       case TYPE_HTML: {
         const html = compileHTML({
           data,
-          debug,
           req,
           res,
         });
@@ -121,7 +94,6 @@ export default (options: Options = {}) => {
       default: {
         const text = compileText({
           data,
-          debug,
           req,
           res,
         });

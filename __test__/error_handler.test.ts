@@ -10,7 +10,7 @@ describe('errorHandler middleware', () => {
     app.get('/test', () => {
       throw new Error('Test Error');
     });
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/test')
@@ -19,27 +19,63 @@ describe('errorHandler middleware', () => {
 
     assert.equal(response.body.response.status, 500);
     assert.equal(response.body.response.message, 'Test Error');
-    assert.equal(response.body.response.stack, '');
-    assert.deepEqual(response.body.request, {});
   });
 
-  it('should return JSON with debug info when debug: true', async () => {
+  it('should not include stack, extraDebug, or request in response', async () => {
     const app = express();
     app.get('/test', () => {
-      throw new Error('Debug Test');
+      throw new Error('Sensitive Test');
     });
-    app.use(errorHandler({ debug: true }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/test')
       .set('Accept', 'application/json')
       .expect(500);
 
-    assert.equal(response.body.response.status, 500);
-    assert.ok(response.body.response.stack);
-    assert.ok(response.body.request.method);
-    assert.equal(response.body.request.method, 'GET');
-    assert.equal(response.body.request.path, '/test');
+    assert.equal(response.body.response.stack, undefined);
+    assert.equal(response.body.response.extraDebug, undefined);
+    assert.equal(response.body.request, undefined);
+  });
+
+  it('should not include sensitive info in response', async () => {
+    const app = express();
+    app.get('/test', () => {
+      throw new Error('Debug Test');
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .set('x-secret-header', 'sensitive-value')
+      .set('x-forwarded-client-cert', 'spiffe://cluster.local/ns/test')
+      .expect(500);
+
+    assert.equal(response.body.response.stack, undefined);
+    assert.equal(response.body.response.extraDebug, undefined);
+    assert.equal(response.body.request, undefined);
+    const body = JSON.stringify(response.body);
+    assert.ok(!body.includes('sensitive-value'), 'Response must not contain request headers');
+    assert.ok(!body.includes('spiffe://'), 'Response must not contain SPIFFE IDs');
+  });
+
+  it('should not include extraDebug content in response', async () => {
+    const app = express();
+    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
+      const handler = new Handler(new Error('test'), 500, 'Test', {}, { internalSecret: 'hidden' });
+      next(handler);
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .expect(500);
+
+    const body = JSON.stringify(response.body);
+    assert.ok(!body.includes('internalSecret'), 'Response body must not contain extraDebug content');
+    assert.ok(!body.includes('hidden'), 'Response body must not contain extraDebug values');
   });
 
   it('should return HTML response with Accept: text/html', async () => {
@@ -47,7 +83,7 @@ describe('errorHandler middleware', () => {
     app.get('/test', () => {
       throw new Error('HTML Test');
     });
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/test')
@@ -58,12 +94,30 @@ describe('errorHandler middleware', () => {
     assert.equal(response.headers['content-type'], 'text/html; charset=utf-8');
   });
 
+  it('should not include stack trace or request details in HTML response', async () => {
+    const app = express();
+    app.get('/test', () => {
+      throw new Error('HTML Stack Test');
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'text/html')
+      .set('x-secret-header', 'sensitive-value')
+      .expect(500);
+
+    assert.ok(!response.text.includes('Stack trace'), 'HTML response must not contain stack trace section');
+    assert.ok(!response.text.includes('Extra debug'), 'HTML response must not contain extra debug section');
+    assert.ok(!response.text.includes('sensitive-value'), 'HTML response must not contain request headers');
+  });
+
   it('should return text/plain response by default', async () => {
     const app = express();
     app.get('/test', () => {
       throw new Error('Plain Text Test');
     });
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/test')
@@ -73,13 +127,32 @@ describe('errorHandler middleware', () => {
     assert.equal(response.headers['content-type'], 'text/plain; charset=utf-8');
   });
 
+  it('should not include stack trace or request details in text response', async () => {
+    const app = express();
+    app.get('/test', () => {
+      throw new Error('Text Stack Test');
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'text/plain')
+      .set('x-secret-header', 'sensitive-value')
+      .expect(500);
+
+    assert.ok(!response.text.includes('Stack trace'), 'Text response must not contain stack trace');
+    assert.ok(!response.text.includes('Extra debug'), 'Text response must not contain extra debug');
+    assert.ok(!response.text.includes('Headers'), 'Text response must not contain request headers');
+    assert.ok(!response.text.includes('sensitive-value'), 'Text response must not contain request header values');
+  });
+
   it('should handle Handler instance', async () => {
     const app = express();
     app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
       const handler = new Handler(undefined, 503, 'Service Unavailable', { code: 'E-503' });
       next(handler);
     });
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/test')
@@ -96,7 +169,7 @@ describe('errorHandler middleware', () => {
     app.get('/test', () => {
       throw new Error('Custom Status Test');
     });
-    app.use(errorHandler({ status: 502, debug: false }));
+    app.use(errorHandler({ status: 502 }));
 
     const response = await supertest(app)
       .get('/test')
@@ -111,7 +184,7 @@ describe('errorHandler middleware', () => {
     app.get('/test', () => {
       throw new Error('Original Message');
     });
-    app.use(errorHandler({ message: 'Custom Message', debug: false }));
+    app.use(errorHandler({ message: 'Custom Message' }));
 
     const response = await supertest(app)
       .get('/test')
@@ -121,15 +194,13 @@ describe('errorHandler middleware', () => {
     assert.equal(response.body.response.message, 'Custom Message');
   });
 
-  it('should include extra and extraDebug from options', async () => {
+  it('should include extra in response', async () => {
     const app = express();
     app.get('/test', () => {
       throw new Error('Test');
     });
     app.use(errorHandler({
       extra: { foo: 'bar' },
-      extraDebug: { baz: 'qux' },
-      debug: true
     }));
 
     const response = await supertest(app)
@@ -138,10 +209,9 @@ describe('errorHandler middleware', () => {
       .expect(500);
 
     assert.equal(response.body.response.extra.foo, 'bar');
-    assert.equal(response.body.response.extraDebug.baz, 'qux');
   });
 
-  it('should call final callback if provided', async () => {
+  it('should call final callback with full handler including stack and extraDebug', async () => {
     let finalCalled = false;
     let finalHandler: Handler | undefined;
 
@@ -150,7 +220,6 @@ describe('errorHandler middleware', () => {
       throw new Error('Final Test');
     });
     app.use(errorHandler({
-      debug: false,
       final: (_req, _res, handler) => {
         finalCalled = true;
         finalHandler = handler;
@@ -166,6 +235,7 @@ describe('errorHandler middleware', () => {
     assert.ok(finalHandler);
     assert.ok(finalHandler instanceof Handler);
     assert.equal(finalHandler.message, 'Final Test');
+    assert.ok(finalHandler.stack, 'Handler passed to final must still have stack for server-side logging');
   });
 
   it('should handle regular Error vs Handler differently', async () => {
@@ -179,7 +249,7 @@ describe('errorHandler middleware', () => {
       next(new Handler(undefined, 400, 'Handler Error', { type: 'handler' }));
     });
 
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const errorResponse = await supertest(app)
       .get('/error')
@@ -206,7 +276,6 @@ describe('errorHandler middleware', () => {
     });
 
     app.use(errorHandler({
-      debug: false,
       templateHTML: customHTMLTemplate,
       templateTEXT: customTextTemplate
     }));
@@ -231,7 +300,6 @@ describe('errorHandler middleware', () => {
     });
 
     app.use(errorHandler({
-      debug: false,
       templateHTML: customHTMLTemplate,
       templateTEXT: customTextTemplate
     }));
@@ -256,7 +324,6 @@ describe('errorHandler middleware', () => {
     });
 
     app.use(errorHandler({
-      debug: false,
       templateHTML: customHTMLTemplate,
       templateTEXT: customTextTemplate
     }));
@@ -273,25 +340,5 @@ describe('errorHandler middleware', () => {
 
     assert.ok(htmlResponse.text.includes('HTML: Both Templates Test'));
     assert.ok(textResponse.text.includes('TEXT: Both Templates Test'));
-  });
-
-  it('should handle Handler with undefined stack in debug mode', async () => {
-    const app = express();
-    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
-      const handler = new Handler(undefined, 500, 'No Stack Test');
-      // Handler without error parameter has no stack initially
-      handler.stack = undefined;
-      next(handler);
-    });
-    app.use(errorHandler({ debug: true }));
-
-    const response = await supertest(app)
-      .get('/test')
-      .set('Accept', 'application/json')
-      .expect(500);
-
-    assert.equal(response.body.response.status, 500);
-    assert.equal(response.body.response.message, 'No Stack Test');
-    assert.equal(response.body.response.stack, '');
   });
 });

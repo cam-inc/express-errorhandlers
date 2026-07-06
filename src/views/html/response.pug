@@ -12,12 +12,3 @@
     span.key Extra
     pre.
       #{JSON.stringify(data.extra, null, '  ') || '-'}
-  if debug
-    div
-      span.key Error Stack trace
-      pre.
-        #{data.stack || '-'}
-    div
-      span.key Error Extra debug
-      pre.
-        #{JSON.stringify(data.extraDebug, null, '  ') || '-'}

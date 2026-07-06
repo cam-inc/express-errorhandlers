@@ -11,7 +11,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler());
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/favicon.ico')
@@ -26,7 +26,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler());
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/robots.txt')
@@ -41,7 +41,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler());
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/other-path')
@@ -58,7 +58,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler(['/custom-skip', '/another-skip']));
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response1 = await supertest(app)
       .get('/custom-skip')
@@ -91,7 +91,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler(['/skip'], customFn));
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/skip')
@@ -129,7 +129,7 @@ describe('skipOkHandler middleware', () => {
       next(new Error('Test Error'));
     });
     app.use(skipOkHandler([]));
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/favicon.ico')
@@ -155,7 +155,7 @@ describe('skipOkHandler middleware', () => {
       }
     ));
 
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     await supertest(app)
       .get('/custom')

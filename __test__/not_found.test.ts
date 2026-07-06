@@ -9,7 +9,7 @@ describe('notFound middleware', () => {
   it('should return 404 with default message', async () => {
     const app = express();
     app.use(notFound());
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/nonexistent')
@@ -23,7 +23,7 @@ describe('notFound middleware', () => {
   it('should return 404 with custom message', async () => {
     const app = express();
     app.use(notFound('Custom Not Found'));
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/nonexistent')
@@ -37,7 +37,7 @@ describe('notFound middleware', () => {
   it('should include custom extra data', async () => {
     const app = express();
     app.use(notFound('Not Found', { code: 'E-404-001' }));
-    app.use(errorHandler({ debug: false }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/nonexistent')
@@ -47,17 +47,19 @@ describe('notFound middleware', () => {
     assert.equal(response.body.response.extra.code, 'E-404-001');
   });
 
-  it('should include custom extraDebug data', async () => {
+  it('should not include extraDebug in response', async () => {
     const app = express();
     app.use(notFound('Not Found', {}, { debugInfo: 'test' }));
-    app.use(errorHandler({ debug: true }));
+    app.use(errorHandler());
 
     const response = await supertest(app)
       .get('/nonexistent')
       .set('Accept', 'application/json')
       .expect(404);
 
-    assert.equal(response.body.response.extraDebug.debugInfo, 'test');
+    assert.equal(response.body.response.extraDebug, undefined);
+    const body = JSON.stringify(response.body);
+    assert.ok(!body.includes('debugInfo'), 'Response must not contain extraDebug content');
   });
 
   it('should pass Handler instance to next middleware', async () => {
@@ -83,19 +85,19 @@ describe('notFound middleware', () => {
   it('should work with all parameter combinations', async () => {
     const app1 = express();
     app1.use(notFound());
-    app1.use(errorHandler({ debug: false }));
+    app1.use(errorHandler());
 
     const app2 = express();
     app2.use(notFound('Custom'));
-    app2.use(errorHandler({ debug: false }));
+    app2.use(errorHandler());
 
     const app3 = express();
     app3.use(notFound('Custom', { foo: 'bar' }));
-    app3.use(errorHandler({ debug: false }));
+    app3.use(errorHandler());
 
     const app4 = express();
     app4.use(notFound('Custom', { foo: 'bar' }, { baz: 'qux' }));
-    app4.use(errorHandler({ debug: true }));
+    app4.use(errorHandler());
 
     const res1 = await supertest(app1).get('/').set('Accept', 'application/json');
     const res2 = await supertest(app2).get('/').set('Accept', 'application/json');
@@ -105,6 +107,6 @@ describe('notFound middleware', () => {
     assert.equal(res1.body.response.message, 'Not Found');
     assert.equal(res2.body.response.message, 'Custom');
     assert.equal(res3.body.response.extra.foo, 'bar');
-    assert.equal(res4.body.response.extraDebug.baz, 'qux');
+    assert.equal(res4.body.response.extraDebug, undefined);
   });
 });
