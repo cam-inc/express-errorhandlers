@@ -104,4 +104,24 @@ describe('Basic test case', () => {
     assert.equal(handler3.name, 'Server Error');
   });
 
+  it('Handler propagates code from original error', () => {
+    const error = Object.assign(new Error('Validation Failed'), { code: 'SCHEMA_VALIDATION_FAILED' });
+    const handler = new Handler(error, 400, 'Bad Request');
+
+    assert.equal(handler.code, 'SCHEMA_VALIDATION_FAILED');
+  });
+
+  it('Handler code is undefined when original error has no code', () => {
+    const error = new Error('No Code');
+    const handler = new Handler(error);
+
+    assert.equal(handler.code, undefined);
+  });
+
+  it('Handler code is undefined when no error is provided', () => {
+    const handler = new Handler(undefined, 500, 'Server Error');
+
+    assert.equal(handler.code, undefined);
+  });
+
 });

@@ -1,6 +1,6 @@
 {
   "name": "express-errorhandlers",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Error handler for expressjs",
   "main": "dist/index.js",
   "types": "./dist/index.d.ts",
