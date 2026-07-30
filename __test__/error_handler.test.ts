@@ -266,6 +266,74 @@ describe('errorHandler middleware', () => {
     assert.equal(handlerResponse.body.response.extra.type, 'handler');
   });
 
+  it('should honor err.status on a plain Error (basic-auth-connect style)', async () => {
+    const app = express();
+    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
+      const err = new Error('Bad Request') as Error & { status?: number };
+      err.status = 400;
+      next(err);
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .expect(400);
+
+    assert.equal(response.body.response.status, 400);
+  });
+
+  it('should honor err.statusCode on a plain Error', async () => {
+    const app = express();
+    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
+      const err = new Error('Forbidden') as Error & { statusCode?: number };
+      err.statusCode = 403;
+      next(err);
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .expect(403);
+
+    assert.equal(response.body.response.status, 403);
+  });
+
+  it('should fall back to 500 when err.status is out of the 400-599 range', async () => {
+    const app = express();
+    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
+      const err = new Error('Weird') as Error & { status?: number };
+      err.status = 0;
+      next(err);
+    });
+    app.use(errorHandler());
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .expect(500);
+
+    assert.equal(response.body.response.status, 500);
+  });
+
+  it('should let options.status override err.status', async () => {
+    const app = express();
+    app.get('/test', (_req: Request, _res: Response, next: NextFunction) => {
+      const err = new Error('Bad Request') as Error & { status?: number };
+      err.status = 400;
+      next(err);
+    });
+    app.use(errorHandler({ status: 502 }));
+
+    const response = await supertest(app)
+      .get('/test')
+      .set('Accept', 'application/json')
+      .expect(502);
+
+    assert.equal(response.body.response.status, 502);
+  });
+
   it('should handle custom HTML template string', async () => {
     const customHTMLTemplate = 'html\n  head\n    title Error\n  body\n    h1= data.message\n    p Status: #{data.status}';
     const customTextTemplate = 'p= data.message';
